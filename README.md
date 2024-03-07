@@ -1,52 +1,59 @@
-# vue-project
+# JIE CLI Lego 业务组件库
 
-This template should help get you started developing with Vue 3 in Vite.
+### 提供一个业务组件库在编辑器和 H5 页面中都可以使用
 
-## Recommended IDE Setup
+该组件包导出两种格式的模块，供不同情况下使用
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+```javascript
+  // umd 格式
+  "main": "dist/lego-components.umd.js",
+  // es modules 格式
+  "module": "dist/lego-components.esm.js",
 ```
 
-### Compile and Hot-Reload for Development
+## 安装和使用
 
-```sh
-npm run dev
+```bash
+// 安装
+npm install lego-components --save
 ```
 
-### Type-Check, Compile and Minify for Production
+```javascript
+import Lego from 'lego-components'
+// 加载样式
+import 'lego-components/dist/lego-components.css'
 
-```sh
-npm run build
+const app = createApp(App)
+// 全局引入 目前包括 FinalPage, LText, LImage 三个组件
+app.use(Lego)
+
+app.mount('#app')
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+### 渲染最终页面
 
-```sh
-npm run test:unit
+```javascript
+setup() {
+  // 使用 finalPage 组件进行渲染，使用我们预定义好的数据结构
+  const testData = {
+    // 整个页面的属性
+    page: { props: { backgroundImage: 'url("https://vue-maker.oss-cn-hangzhou.aliyuncs.com/vue-marker/5f6ea094dc5a797fb46c1db5.jpg")'}},
+    // 页面上面一个个组件的属性
+    components: [
+      {id: '123', name: 'l-text', props: { text: 'hello', top: '0', left: '20px'}},
+      {id: '234', name: 'l-image', props: { imageSrc: 'http://vue-maker.oss-cn-hangzhou.aliyuncs.com/vue-marker/5f6338e666336111f73d220c.png', top: '30px', left: '20px'}}
+    ]
+  }
+  return {
+    testData
+  }
+}
 ```
 
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
+```html
+<final-page :page="testData.page" :components="testData.components"></final-page>
 ```
+
+## 最终页面效果
+
+![最终页面效果](./result.png)
