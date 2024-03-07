@@ -1,6 +1,6 @@
 {
   "name": "jie-cli-components",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "333",
   "private": false,
   "main": "dist/jie-cli-components.umd.js",
@@ -19,13 +19,16 @@
     "dev": "vite",
     "build": "npm run build:es && npm run build:umd",
     "preview": "vite preview",
+    "test": "vitest",
     "test:unit": "vitest",
+    "test:watch": "vitest --watch",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
     "build:es": "rollup --config build/rollup.esm.config.js",
-    "build:umd": "rollup --config build/rollup.umd.config.js"
+    "build:umd": "rollup --config build/rollup.umd.config.js",
+    "prepublishOnly": "npm run lint && npm run test && npm run build"
   },
   "dependencies": {
     "lodash-es": "^4.17.21"
