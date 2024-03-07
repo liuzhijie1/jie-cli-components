@@ -1,4 +1,4 @@
-import basicConfig, { name, file } from './rollup.config'
+import basicConfig, { name, file } from './rollup.config.js'
 import vue from 'rollup-plugin-vue'
 
 basicConfig.plugins.push(vue({ css: false, template: { optimizeSSR: true } }))

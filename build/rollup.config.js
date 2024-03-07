@@ -6,9 +6,11 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 // import replace from '@rollup/plugin-replace'
 import css from 'rollup-plugin-css-only'
 // import CleanCSS from 'clean-css'
-import fs from 'fs'
+import json from '@rollup/plugin-json'
+import fs, { readFileSync } from 'fs'
 
-const config = require('../package.json')
+
+const config = JSON.parse(readFileSync(new URL('../package.json', import.meta.url)));
 
 const { name } = config
 const file = type => `dist/${name}.${type}.js`
@@ -23,13 +25,14 @@ export default {
     format: 'esm'
   },
   plugins: [
+    json(),
     nodeResolve(),
     css({
       output(style) {
         !fs.existsSync('dist') && fs.mkdirSync('dist')
         fs.writeFileSync(`dist/${name}.css`, style)
       }
-    }), 
+    }),
     // replace({
     //   VERSION: JSON.stringify(version)
     // })
