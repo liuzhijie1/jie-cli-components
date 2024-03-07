@@ -3,8 +3,8 @@ function makeMap(str, expectsLowerCase) {
   return expectsLowerCase ? (val) => set.has(val.toLowerCase()) : (val) => set.has(val);
 }
 
-const EMPTY_OBJ = !!(process.env.NODE_ENV !== "production") ? Object.freeze({}) : {};
-const EMPTY_ARR = !!(process.env.NODE_ENV !== "production") ? Object.freeze([]) : [];
+const EMPTY_OBJ = process.env.NODE_ENV !== "production" ? Object.freeze({}) : {};
+const EMPTY_ARR = process.env.NODE_ENV !== "production" ? Object.freeze([]) : [];
 const NOOP = () => {
 };
 const isOn = (key) => key.charCodeAt(0) === 111 && key.charCodeAt(1) === 110 && // uppercase letter
@@ -309,7 +309,7 @@ function trackEffect(effect2, dep, debuggerEventExtraInfo) {
     } else {
       effect2._depsLength++;
     }
-    if (!!(process.env.NODE_ENV !== "production")) {
+    if (process.env.NODE_ENV !== "production") {
       (_a = effect2.onTrack) == null ? void 0 : _a.call(effect2, extend({ effect: effect2 }, debuggerEventExtraInfo));
     }
   }
@@ -326,7 +326,7 @@ function triggerEffects(dep, dirtyLevel, debuggerEventExtraInfo) {
       const lastDirtyLevel = effect2._dirtyLevel;
       effect2._dirtyLevel = dirtyLevel;
       if (lastDirtyLevel === 0 && (!effect2._queryings || dirtyLevel !== 2)) {
-        if (!!(process.env.NODE_ENV !== "production")) {
+        if (process.env.NODE_ENV !== "production") {
           (_a = effect2.onTrigger) == null ? void 0 : _a.call(effect2, extend({ effect: effect2 }, debuggerEventExtraInfo));
         }
         effect2.trigger();
@@ -347,8 +347,8 @@ const createDep = (cleanup, computed) => {
 };
 
 const targetMap = /* @__PURE__ */ new WeakMap();
-const ITERATE_KEY = Symbol(!!(process.env.NODE_ENV !== "production") ? "iterate" : "");
-const MAP_KEY_ITERATE_KEY = Symbol(!!(process.env.NODE_ENV !== "production") ? "Map key iterate" : "");
+const ITERATE_KEY = Symbol(process.env.NODE_ENV !== "production" ? "iterate" : "");
+const MAP_KEY_ITERATE_KEY = Symbol(process.env.NODE_ENV !== "production" ? "Map key iterate" : "");
 function track(target, type, key) {
   if (shouldTrack && activeEffect) {
     let depsMap = targetMap.get(target);
@@ -362,7 +362,7 @@ function track(target, type, key) {
     trackEffect(
       activeEffect,
       dep,
-      !!(process.env.NODE_ENV !== "production") ? {
+      process.env.NODE_ENV !== "production" ? {
         target,
         type,
         key
@@ -421,7 +421,7 @@ function trigger(target, type, key, newValue, oldValue, oldTarget) {
       triggerEffects(
         dep,
         3,
-        !!(process.env.NODE_ENV !== "production") ? {
+        process.env.NODE_ENV !== "production" ? {
           target,
           type,
           key,
@@ -584,7 +584,7 @@ class ReadonlyReactiveHandler extends BaseReactiveHandler {
     super(true, shallow);
   }
   set(target, key) {
-    if (!!(process.env.NODE_ENV !== "production")) {
+    if (process.env.NODE_ENV !== "production") {
       warn(
         `Set operation on key "${String(key)}" failed: target is readonly.`,
         target
@@ -593,7 +593,7 @@ class ReadonlyReactiveHandler extends BaseReactiveHandler {
     return true;
   }
   deleteProperty(target, key) {
-    if (!!(process.env.NODE_ENV !== "production")) {
+    if (process.env.NODE_ENV !== "production") {
       warn(
         `Delete operation on key "${String(key)}" failed: target is readonly.`,
         target
@@ -664,7 +664,7 @@ function set(key, value) {
   if (!hadKey) {
     key = toRaw(key);
     hadKey = has2.call(target, key);
-  } else if (!!(process.env.NODE_ENV !== "production")) {
+  } else if (process.env.NODE_ENV !== "production") {
     checkIdentityKeys(target, has2, key);
   }
   const oldValue = get2.call(target, key);
@@ -683,7 +683,7 @@ function deleteEntry(key) {
   if (!hadKey) {
     key = toRaw(key);
     hadKey = has2.call(target, key);
-  } else if (!!(process.env.NODE_ENV !== "production")) {
+  } else if (process.env.NODE_ENV !== "production") {
     checkIdentityKeys(target, has2, key);
   }
   const oldValue = get2 ? get2.call(target, key) : void 0;
@@ -696,7 +696,7 @@ function deleteEntry(key) {
 function clear() {
   const target = toRaw(this);
   const hadItems = target.size !== 0;
-  const oldTarget = !!(process.env.NODE_ENV !== "production") ? isMap(target) ? new Map(target) : new Set(target) : void 0;
+  const oldTarget = process.env.NODE_ENV !== "production" ? isMap(target) ? new Map(target) : new Set(target) : void 0;
   const result = target.clear();
   if (hadItems) {
     trigger(target, "clear", void 0, void 0, oldTarget);
@@ -747,7 +747,7 @@ function createIterableMethod(method, isReadonly, isShallow) {
 }
 function createReadonlyMethod(type) {
   return function(...args) {
-    if (!!(process.env.NODE_ENV !== "production")) {
+    if (process.env.NODE_ENV !== "production") {
       const key = args[0] ? `on key "${args[0]}" ` : ``;
       console.warn(
         `${capitalize(type)} operation ${key}failed: target is readonly.`,
@@ -943,7 +943,7 @@ function shallowReadonly(target) {
 }
 function createReactiveObject(target, isReadonly2, baseHandlers, collectionHandlers, proxyMap) {
   if (!isObject$1(target)) {
-    if (!!(process.env.NODE_ENV !== "production")) {
+    if (process.env.NODE_ENV !== "production") {
       console.warn(`value cannot be made reactive: ${String(target)}`);
     }
     return target;
@@ -1034,7 +1034,7 @@ function computed$1(getterOrOptions, debugOptions, isSSR = false) {
   const onlyGetter = isFunction$1(getterOrOptions);
   if (onlyGetter) {
     getter = getterOrOptions;
-    setter = !!(process.env.NODE_ENV !== "production") ? () => {
+    setter = process.env.NODE_ENV !== "production" ? () => {
       console.warn("Write operation failed: computed value is readonly");
     } : NOOP;
   } else {
@@ -1058,7 +1058,7 @@ function trackRefValue(ref2) {
         () => ref2.dep = void 0,
         ref2 instanceof ComputedRefImpl ? ref2 : void 0
       )),
-      !!(process.env.NODE_ENV !== "production") ? {
+      process.env.NODE_ENV !== "production" ? {
         target: ref2,
         type: "get",
         key: "value"
@@ -1073,7 +1073,7 @@ function triggerRefValue(ref2, dirtyLevel = 3, newVal) {
     triggerEffects(
       dep,
       dirtyLevel,
-      !!(process.env.NODE_ENV !== "production") ? {
+      process.env.NODE_ENV !== "production" ? {
         target: ref2,
         type: "set",
         key: "value",
@@ -1269,7 +1269,7 @@ function handleError(err, instance, type, throwInDev = true) {
   if (instance) {
     let cur = instance.parent;
     const exposedInstance = instance.proxy;
-    const errorInfo = !!(process.env.NODE_ENV !== "production") ? ErrorTypeStrings$1[type] : `https://vuejs.org/errors/#runtime-${type}`;
+    const errorInfo = process.env.NODE_ENV !== "production" ? ErrorTypeStrings$1[type] : `https://vuejs.org/errors/#runtime-${type}`;
     while (cur) {
       const errorCapturedHooks = cur.ec;
       if (errorCapturedHooks) {
@@ -1295,7 +1295,7 @@ function handleError(err, instance, type, throwInDev = true) {
   logError(err, type, contextVNode, throwInDev);
 }
 function logError(err, type, contextVNode, throwInDev = true) {
-  if (!!(process.env.NODE_ENV !== "production")) {
+  if (process.env.NODE_ENV !== "production") {
     const info = ErrorTypeStrings$1[type];
     if (contextVNode) {
       pushWarningContext(contextVNode);
@@ -1384,7 +1384,7 @@ function flushPostFlushCbs(seen) {
       return;
     }
     activePostFlushCbs = deduped;
-    if (!!(process.env.NODE_ENV !== "production")) {
+    if (process.env.NODE_ENV !== "production") {
       seen = seen || /* @__PURE__ */ new Map();
     }
     activePostFlushCbs.sort((a, b) => getId(a) - getId(b));
@@ -1412,11 +1412,11 @@ const comparator = (a, b) => {
 function flushJobs(seen) {
   isFlushPending = false;
   isFlushing = true;
-  if (!!(process.env.NODE_ENV !== "production")) {
+  if (process.env.NODE_ENV !== "production") {
     seen = seen || /* @__PURE__ */ new Map();
   }
   queue.sort(comparator);
-  const check = !!(process.env.NODE_ENV !== "production") ? (job) => checkRecursiveUpdates(seen, job) : NOOP;
+  const check = process.env.NODE_ENV !== "production" ? (job) => checkRecursiveUpdates(seen, job) : NOOP;
   try {
     for (flushIndex = 0; flushIndex < queue.length; flushIndex++) {
       const job = queue[flushIndex];
@@ -1458,7 +1458,7 @@ function checkRecursiveUpdates(seen, fn) {
   }
 }
 const hmrDirtyComponents = /* @__PURE__ */ new Set();
-if (!!(process.env.NODE_ENV !== "production")) {
+if (process.env.NODE_ENV !== "production") {
   getGlobalThis().__VUE_HMR_RUNTIME__ = {
     createRecord: tryWrap(createRecord),
     rerender: tryWrap(rerender),
@@ -1691,7 +1691,7 @@ If this is a native custom element, make sure to exclude it from component resol
       warn$1(`Failed to resolve ${type.slice(0, -1)}: ${name}${extra}`);
     }
     return res;
-  } else if (!!(process.env.NODE_ENV !== "production")) {
+  } else if (process.env.NODE_ENV !== "production") {
     warn$1(
       `resolve${capitalize(type.slice(0, -1))} can only be used in render() or setup().`
     );
@@ -1886,7 +1886,7 @@ function doWatch(source, cb, {
       remove(instance.scope.effects, effect);
     }
   };
-  if (!!(process.env.NODE_ENV !== "production")) {
+  if (process.env.NODE_ENV !== "production") {
     effect.onTrack = onTrack;
     effect.onTrigger = onTrigger;
   }
@@ -2024,10 +2024,10 @@ const publicPropertiesMap = (
     $: (i) => i,
     $el: (i) => i.vnode.el,
     $data: (i) => i.data,
-    $props: (i) => !!(process.env.NODE_ENV !== "production") ? shallowReadonly(i.props) : i.props,
-    $attrs: (i) => !!(process.env.NODE_ENV !== "production") ? shallowReadonly(i.attrs) : i.attrs,
-    $slots: (i) => !!(process.env.NODE_ENV !== "production") ? shallowReadonly(i.slots) : i.slots,
-    $refs: (i) => !!(process.env.NODE_ENV !== "production") ? shallowReadonly(i.refs) : i.refs,
+    $props: (i) => process.env.NODE_ENV !== "production" ? shallowReadonly(i.props) : i.props,
+    $attrs: (i) => process.env.NODE_ENV !== "production" ? shallowReadonly(i.attrs) : i.attrs,
+    $slots: (i) => process.env.NODE_ENV !== "production" ? shallowReadonly(i.slots) : i.slots,
+    $refs: (i) => process.env.NODE_ENV !== "production" ? shallowReadonly(i.refs) : i.refs,
     $parent: (i) => getPublicInstance(i.parent),
     $root: (i) => getPublicInstance(i.root),
     $emit: (i) => i.emit,
@@ -2336,10 +2336,10 @@ function inject(key, defaultValue, treatDefaultAsFactory = false) {
       return provides[key];
     } else if (arguments.length > 1) {
       return treatDefaultAsFactory && isFunction$1(defaultValue) ? defaultValue.call(instance && instance.proxy) : defaultValue;
-    } else if (!!(process.env.NODE_ENV !== "production")) {
+    } else if (process.env.NODE_ENV !== "production") {
       warn$1(`injection "${String(key)}" not found.`);
     }
-  } else if (!!(process.env.NODE_ENV !== "production")) {
+  } else if (process.env.NODE_ENV !== "production") {
     warn$1(`inject() can only be used inside setup() or functional components.`);
   }
 }
@@ -2470,7 +2470,7 @@ function createBaseVNode(type, props = null, children = null, patchFlag = 0, dyn
   }
   return vnode;
 }
-const createVNode = !!(process.env.NODE_ENV !== "production") ? createVNodeWithArgsTransform : _createVNode;
+const createVNode = process.env.NODE_ENV !== "production" ? createVNodeWithArgsTransform : _createVNode;
 function _createVNode(type, props = null, children = null, patchFlag = 0, dynamicProps = null, isBlockNode = false) {
   if (!type || type === NULL_DYNAMIC_COMPONENT) {
     if (!!(process.env.NODE_ENV !== "production") && !type) {
@@ -2759,7 +2759,7 @@ function isShallow(value) {
 }
 
 function initCustomFormatter() {
-  if (!!!(process.env.NODE_ENV !== "production") || typeof window === "undefined") {
+  if (!(process.env.NODE_ENV !== "production") || typeof window === "undefined") {
     return;
   }
   const vueStyle = { style: "color:#3ba776" };
@@ -2933,11 +2933,11 @@ function initCustomFormatter() {
     window.devtoolsFormatters = [formatter];
   }
 }
-!!(process.env.NODE_ENV !== "production") ? warn$1 : NOOP;
+process.env.NODE_ENV !== "production" ? warn$1 : NOOP;
 !!(process.env.NODE_ENV !== "production") || __VUE_PROD_DEVTOOLS__ ? devtools$1 : void 0;
 !!(process.env.NODE_ENV !== "production") || __VUE_PROD_DEVTOOLS__ ? setDevtoolsHook$1 : NOOP;
 
-Symbol(!!(process.env.NODE_ENV !== "production") ? "CSS_VAR_TEXT" : "");
+Symbol(process.env.NODE_ENV !== "production" ? "CSS_VAR_TEXT" : "");
 
 const systemModifiers = ["ctrl", "shift", "alt", "meta"];
 const modifierGuards = {
@@ -2972,7 +2972,7 @@ function initDev() {
   }
 }
 
-if (!!(process.env.NODE_ENV !== "production")) {
+if (process.env.NODE_ENV !== "production") {
   initDev();
 }
 
