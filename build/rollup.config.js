@@ -1,6 +1,6 @@
 // import babel from '@rollup/plugin-babel'
 // import { nodeResolve } from '@rollup/plugin-node-resolve'
-// import vue from 'rollup-plugin-vue'
+import vue from 'rollup-plugin-vue'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import typescript from 'rollup-plugin-typescript2'
 // import cjs from '@rollup/plugin-commonjs'
@@ -20,7 +20,7 @@ const file = type => `dist/${name}.${type}.js`
 export { name, file }
 
 let overrides = {
-  compilerOptions: {declaration: true},
+  compilerOptions: { declaration: true },
   exclude: [
     "node_modules",
     "src/App.vue",
@@ -36,13 +36,14 @@ export default {
     format: 'esm'
   },
   plugins: [
+    vue(),
     json(),
     nodeResolve(),
     excludeDependenciesFromBundle({
       peerDependencies: true,
       dependencies: false
     }),
-    typescript({tsconfigOverride: overrides}),
+    typescript({ tsconfigOverride: overrides }),
     css({
       output(style) {
         !fs.existsSync('dist') && fs.mkdirSync('dist')

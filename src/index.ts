@@ -1,7 +1,7 @@
-import LText from './components/LText'
-import LImage from './components/LImage'
-import LShape from './components/LShape'
-import FinalPage from './components/FinalPage'
+import LText from './components/LText/index'
+import LImage from './components/LImage/index'
+import LShape from './components/LShape/index'
+import FinalPage from './components/FinalPage/index'
 
 const components = [LText, LImage, LShape, FinalPage]
 
