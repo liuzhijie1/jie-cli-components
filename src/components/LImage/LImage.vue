@@ -22,7 +22,7 @@ const handleClick = () => {
   }
 }
 </script>
-<style scoped>
+<style>
 .l-image-component {
   max-width: 100%;
 }

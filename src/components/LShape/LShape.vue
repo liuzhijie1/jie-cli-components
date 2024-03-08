@@ -24,7 +24,7 @@ const handleClick = () => {
 }
 </script>
 
-<script>
+<script lang="ts">
 import { componentsDefaultProps, transformToComponentProps } from '../../defaultProps.js'
 
 const defaultProps = transformToComponentProps(componentsDefaultProps['l-shape'].props)

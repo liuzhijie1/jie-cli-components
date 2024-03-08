@@ -3339,256 +3339,226 @@
   });
 
   const commonDefaultProps = {
-    // actions
-    actionType: '',
-    url: '',
-    // size
-    height: '',
-    width: '318px',
-    paddingLeft: '0px',
-    paddingRight: '0px',
-    paddingTop: '0px',
-    paddingBottom: '0px',
-    // border type
-    borderStyle: 'none',
-    borderColor: '#000',
-    borderWidth: '0',
-    borderRadius: '0',
-    // shadow and opacity
-    boxShadow: '0 0 0 #000000',
-    opacity: 1,
-    // postiion and x,y
-    position: 'absolute',
-    left: '0',
-    top: '0',
-    right: '0'
+      // actions
+      actionType: '',
+      url: '',
+      // size
+      height: '',
+      width: '318px',
+      paddingLeft: '0px',
+      paddingRight: '0px',
+      paddingTop: '0px',
+      paddingBottom: '0px',
+      // border type
+      borderStyle: 'none',
+      borderColor: '#000',
+      borderWidth: '0',
+      borderRadius: '0',
+      // shadow and opacity
+      boxShadow: '0 0 0 #000000',
+      opacity: 1,
+      // postiion and x,y
+      position: 'absolute',
+      left: '0',
+      top: '0',
+      right: '0'
   };
-
   const textDefaultProps = {
-    // basic props - font styles
-    fontSize: '14px',
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    textDecoration: 'none',
-    lineHeight: '1',
-    textAlign: 'left',
-    color: '#000000',
-    backgroundColor: '',
-    ...commonDefaultProps
+      // basic props - font styles
+      fontSize: '14px',
+      fontFamily: '',
+      fontWeight: 'normal',
+      fontStyle: 'normal',
+      textDecoration: 'none',
+      lineHeight: '1',
+      textAlign: 'left',
+      color: '#000000',
+      backgroundColor: '',
+      ...commonDefaultProps
   };
-
   const imageDefaultProps = {
-    imageSrc: '',
-    ...commonDefaultProps
+      imageSrc: '',
+      ...commonDefaultProps
   };
-
   const componentsDefaultProps = {
-    'l-text': {
-      props: {
-        text: '正文内容',
-        ...textDefaultProps,
-        fontSize: '14px'
+      'l-text': {
+          props: {
+              text: '正文内容',
+              ...textDefaultProps,
+              fontSize: '14px'
+          }
+      },
+      'l-image': {
+          props: {
+              ...imageDefaultProps
+          }
+      },
+      'l-shape': {
+          props: {
+              backgroundColor: '',
+              ...commonDefaultProps
+          }
       }
-    },
-    'l-image': {
-      props: {
-        ...imageDefaultProps
-      }
-    },
-    'l-shape': {
-      props: {
-        backgroundColor: '',
-        ...commonDefaultProps
-      }
-    }
   };
-
   const transformToComponentProps = (props) => {
-    return mapValues(props, (item) => {
-      return {
-        type: item.constructor,
-        default: item
-      }
-    })
+      return mapValues(props, (item) => {
+          return {
+              type: item.constructor,
+              default: item
+          };
+      });
   };
 
   const defaultStyles = without(Object.keys(textDefaultProps), 'actionType', 'url', 'text');
-
   const useStylePick = (props, pickStyles = defaultStyles) => {
-    return vue.computed(() => pick(props, pickStyles))
+      return vue.computed(() => pick(props, pickStyles));
   };
 
-  var script$3 = /*#__PURE__*/Object.assign({ name: 'l-text' }, {
-    __name: 'LText',
-    setup(__props) {
-
-  const defaultProps = transformToComponentProps(componentsDefaultProps['l-text'].props);
-  defaultProps.tag = {
-    type: String,
-    default: 'p'
+  const defaultProps$1 = transformToComponentProps(componentsDefaultProps['l-text'].props);
+  defaultProps$1.tag = {
+      type: String,
+      default: 'p'
   };
-
-
-  const props = defaultProps({
-    ...defaultProps
-  });
-
-  const styleProps = useStylePick(props);
-  const handleClick = () => {
-    if (props.actionType && props.url) {
-      window.location.href = props.url;
-    }
-  };
-
-  return (_ctx, _cache) => {
-    return (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(_ctx.tag), {
-      onClick: vue.withModifiers(handleClick, ["prevent"]),
-      style: vue.normalizeStyle(vue.unref(styleProps)),
-      class: "l-text-component"
-    }, {
-      default: vue.withCtx(() => [
-        vue.createTextVNode(vue.toDisplayString(_ctx.text), 1 /* TEXT */)
-      ]),
-      _: 1 /* STABLE */
-    }, 8 /* PROPS */, ["style"]))
-  }
-  }
-
+  var script$3 = /*#__PURE__*/ vue.defineComponent({
+      ...{ name: 'l-text' },
+      __name: 'LText',
+      props: {
+          ...defaultProps$1
+      },
+      setup(__props) {
+          const props = __props;
+          const styleProps = useStylePick(props);
+          const handleClick = () => {
+              if (props.actionType && props.url) {
+                  window.location.href = props.url;
+              }
+          };
+          return (_ctx, _cache) => {
+              return (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(_ctx.tag), {
+                  onClick: vue.withModifiers(handleClick, ["prevent"]),
+                  style: vue.normalizeStyle(vue.unref(styleProps)),
+                  class: "l-text-component"
+              }, {
+                  default: vue.withCtx(() => [
+                      vue.createTextVNode(vue.toDisplayString(_ctx.text), 1 /* TEXT */)
+                  ]),
+                  _: 1 /* STABLE */
+              }, 8 /* PROPS */, ["style"]));
+          };
+      }
   });
 
   script$3.__scopeId = "data-v-6bf95b7a";
   script$3.__file = "src/components/LText/LText.vue";
 
-  script$3.install = function(app) {
-    app.component(script$3.name, script$3);
+  script$3.install = (app) => {
+      app.component(script$3.name, script$3);
   };
 
   const _hoisted_1$1 = ["src"];
-
-  var script$2 = /*#__PURE__*/Object.assign({ name: 'l-image' }, {
-    __name: 'LImage',
-    props: transformToComponentProps(componentsDefaultProps['l-image'].props),
-    setup(__props) {
-
-
-
-  const props = __props;
-
-  const styleProps = useStylePick(props);
-  const handleClick = () => {
-    if (props.actionType && props.url) {
-      window.location.href = props.url;
-    }
-  };
-
-  return (_ctx, _cache) => {
-    return (vue.openBlock(), vue.createElementBlock("img", {
-      src: _ctx.imageSrc,
-      style: vue.normalizeStyle(vue.unref(styleProps)),
-      onClick: vue.withModifiers(handleClick, ["prevent"]),
-      class: "l-image-component",
-      draggable: false
-    }, null, 12 /* STYLE, PROPS */, _hoisted_1$1))
-  }
-  }
-
+  var script$2 = /*#__PURE__*/ vue.defineComponent({
+      ...{ name: 'l-image' },
+      __name: 'LImage',
+      props: transformToComponentProps(componentsDefaultProps['l-image'].props),
+      setup(__props) {
+          const props = __props;
+          const styleProps = useStylePick(props);
+          const handleClick = () => {
+              if (props.actionType && props.url) {
+                  window.location.href = props.url;
+              }
+          };
+          return (_ctx, _cache) => {
+              return (vue.openBlock(), vue.createElementBlock("img", {
+                  src: _ctx.imageSrc,
+                  style: vue.normalizeStyle(vue.unref(styleProps)),
+                  onClick: vue.withModifiers(handleClick, ["prevent"]),
+                  class: "l-image-component",
+                  draggable: false
+              }, null, 12 /* STYLE, PROPS */, _hoisted_1$1));
+          };
+      }
   });
 
-  script$2.__scopeId = "data-v-1e970aa2";
   script$2.__file = "src/components/LImage/LImage.vue";
 
-  script$2.install = function(app) {
-    app.component(script$2.name, script$2);
+  script$2.install = (app) => {
+      app.component(script$2.name, script$2);
   };
 
   const defaultProps = transformToComponentProps(componentsDefaultProps['l-shape'].props);
-
-
-  var script$1 = /*#__PURE__*/Object.assign({ name: 'l-shape' }, {
-    __name: 'LShape',
-    props: {
-    ...defaultProps
-  },
-    setup(__props) {
-
-
-
-  const props = __props;
-
-  const styleProps = useStylePick(props);
-  const handleClick = () => {
-    if (props.actionType && props.url) {
-      window.location.href = props.url;
-    }
-  };
-
-  return (_ctx, _cache) => {
-    return (vue.openBlock(), vue.createElementBlock("div", {
-      onClick: vue.withModifiers(handleClick, ["prevent"]),
-      style: vue.normalizeStyle(vue.unref(styleProps)),
-      class: "l-shape-component",
-      draggable: false
-    }, null, 4 /* STYLE */))
-  }
-  }
-
+  var script$1 = /*#__PURE__*/ vue.defineComponent({
+      ...{ name: 'l-shape' },
+      __name: 'LShape',
+      props: {
+          ...defaultProps
+      },
+      setup(__props) {
+          const props = __props;
+          const styleProps = useStylePick(props);
+          const handleClick = () => {
+              if (props.actionType && props.url) {
+                  window.location.href = props.url;
+              }
+          };
+          return (_ctx, _cache) => {
+              return (vue.openBlock(), vue.createElementBlock("div", {
+                  onClick: vue.withModifiers(handleClick, ["prevent"]),
+                  style: vue.normalizeStyle(vue.unref(styleProps)),
+                  class: "l-shape-component",
+                  draggable: false
+              }, null, 4 /* STYLE */));
+          };
+      }
   });
 
   script$1.__file = "src/components/LShape/LShape.vue";
 
-  script$1.install = function(app) {
-    app.component(script$1.name, script$1);
+  script$1.install = (app) => {
+      app.component(script$1.name, script$1);
   };
 
   const _hoisted_1 = { class: "final-page" };
-
-
-  var script = /*#__PURE__*/Object.assign({ name: 'final-page' }, {
-    __name: 'FinalPage',
-    props: {
-    components: {
-      type: Array,
-      required: true
-    }
-  },
-    setup(__props) {
-
-  return (_ctx, _cache) => {
-    return (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
-      (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(__props.components, (item) => {
-        return (vue.openBlock(), vue.createElementBlock("div", {
-          key: item.id
-        }, [
-          (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(item.name), vue.normalizeProps(vue.guardReactiveProps(item.props)), null, 16 /* FULL_PROPS */))
-        ]))
-      }), 128 /* KEYED_FRAGMENT */))
-    ]))
-  }
-  }
-
+  const _hoisted_2 = ["id"];
+  var script = /*#__PURE__*/ vue.defineComponent({
+      ...{ name: 'final-page' },
+      __name: 'FinalPage',
+      props: {
+          components: {
+              type: Array,
+              required: true
+          }
+      },
+      setup(__props) {
+          return (_ctx, _cache) => {
+              return (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
+                  (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(__props.components, (item) => {
+                      return (vue.openBlock(), vue.createElementBlock("div", {
+                          key: item.id,
+                          id: `component-${item.id}`
+                      }, [
+                          (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(item.name), vue.normalizeProps(vue.guardReactiveProps(item.props)), null, 16 /* FULL_PROPS */))
+                      ], 8 /* PROPS */, _hoisted_2));
+                  }), 128 /* KEYED_FRAGMENT */))
+              ]));
+          };
+      }
   });
 
   script.__file = "src/components/FinalPage/FinalPage.vue";
 
-  script.install = function(app) {
-    app.component(script.name, script);
+  script.install = (app) => {
+      app.component(script.name, script);
   };
 
-  const components = [
-    script$3,
-    script$2,
-    script$1,
-    script
-  ];
-
-  const install = function (app) {
-    components.map(component => {
-      app.use(component);
-    });
+  const components = [script$3, script$2, script$1, script];
+  const install = (app) => {
+      components.map((component) => {
+          app.use(component);
+      });
   };
-
   var index = {
-    install
+      install
   };
 
   exports.FinalPage = script;

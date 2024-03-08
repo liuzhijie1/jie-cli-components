@@ -7,11 +7,12 @@
 </template>
 
 <script setup lang="ts">
+import {PropType} from 'vue'
 defineOptions({ name: 'final-page' })
 
 const props = defineProps({
   components: {
-    type: Array,
+    type: Array as PropType<any[]>,
     required: true
   }
 })

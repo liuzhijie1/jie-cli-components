@@ -7,14 +7,10 @@
 <script setup lang="ts">
 import useStylePick from '../../hooks/useStylePick.js'
 import { componentsDefaultProps, transformToComponentProps } from '../../defaultProps'
-const defaultProps = transformToComponentProps(componentsDefaultProps['l-text'].props)
-defaultProps.tag = {
-  type: String,
-  default: 'p'
-}
+
 defineOptions({ name: 'l-text' })
 
-const props = defaultProps({
+const props = defineProps({
   ...defaultProps
 })
 
@@ -23,6 +19,14 @@ const handleClick = () => {
   if (props.actionType && props.url) {
     window.location.href = props.url
   }
+}
+</script>
+
+<script lang="ts">
+const defaultProps = transformToComponentProps(componentsDefaultProps['l-text'].props)
+defaultProps.tag = {
+  type: String,
+  default: 'p'
 }
 </script>
 

@@ -1,6 +1,6 @@
 // import babel from '@rollup/plugin-babel'
 // import { nodeResolve } from '@rollup/plugin-node-resolve'
-import vue from 'rollup-plugin-vue'
+// import vue from 'rollup-plugin-vue'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import typescript from 'rollup-plugin-typescript2'
 // import cjs from '@rollup/plugin-commonjs'
@@ -24,7 +24,8 @@ let overrides = {
   exclude: [
     "node_modules",
     "src/App.vue",
-    "src/main.ts"
+    "src/main.ts",
+    "src/router/**"
   ]
 }
 
@@ -36,9 +37,11 @@ export default {
     format: 'esm'
   },
   plugins: [
-    vue(),
+    // vue(),
     json(),
-    nodeResolve(),
+    nodeResolve({
+      // extensions: ['.mjs', '.js', '.json', '.node', '.ts', '.vue']
+    }),
     excludeDependenciesFromBundle({
       peerDependencies: true,
       dependencies: false

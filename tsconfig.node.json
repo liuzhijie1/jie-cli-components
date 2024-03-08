@@ -25,7 +25,7 @@
     "composite": true,
     "noEmit": true,
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "types": ["node"],
     "paths": {
       "@/*": ["src/*"]
