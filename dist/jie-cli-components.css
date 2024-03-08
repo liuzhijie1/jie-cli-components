@@ -15,14 +15,3 @@ button.l-text-component {
 .l-image-component {
   max-width: 100%;
 }
-
-
-.final-page {
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  width: 322px;
-  min-height: 600px;
-  position: relative;
-  margin: 0 auto;
-}
