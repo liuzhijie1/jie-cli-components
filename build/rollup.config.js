@@ -8,6 +8,7 @@ import css from 'rollup-plugin-css-only'
 // import CleanCSS from 'clean-css'
 import json from '@rollup/plugin-json'
 import fs, { readFileSync } from 'fs'
+import excludeDependenciesFromBundle from 'rollup-plugin-exclude-dependencies-from-bundle'
 
 
 const config = JSON.parse(readFileSync(new URL('../package.json', import.meta.url)));
@@ -27,6 +28,10 @@ export default {
   plugins: [
     json(),
     nodeResolve(),
+    excludeDependenciesFromBundle({
+      peerDependencies: true,
+      dependencies: false
+    }),
     css({
       output(style) {
         !fs.existsSync('dist') && fs.mkdirSync('dist')
