@@ -4,7 +4,7 @@ import { textDefaultProps } from '../defaultProps'
 
 export const defaultStyles = without(Object.keys(textDefaultProps), 'actionType', 'url', 'text')
 
-const useStylePick = (props, pickStyles = defaultStyles) => {
+const useStylePick = (props: any, pickStyles = defaultStyles) => {
   return computed(() => pick(props, pickStyles))
 }
 

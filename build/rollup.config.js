@@ -2,6 +2,7 @@
 // import { nodeResolve } from '@rollup/plugin-node-resolve'
 // import vue from 'rollup-plugin-vue'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
+import typescript from 'rollup-plugin-typescript2'
 // import cjs from '@rollup/plugin-commonjs'
 // import replace from '@rollup/plugin-replace'
 import css from 'rollup-plugin-css-only'
@@ -18,8 +19,17 @@ const file = type => `dist/${name}.${type}.js`
 
 export { name, file }
 
+let overrides = {
+  compilerOptions: {declaration: true},
+  exclude: [
+    "node_modules",
+    "src/App.vue",
+    "src/main.ts"
+  ]
+}
+
 export default {
-  input: 'src/index.js',
+  input: 'src/index.ts',
   output: {
     name,
     file: file('esm'),
@@ -32,6 +42,7 @@ export default {
       peerDependencies: true,
       dependencies: false
     }),
+    typescript({tsconfigOverride: overrides}),
     css({
       output(style) {
         !fs.existsSync('dist') && fs.mkdirSync('dist')

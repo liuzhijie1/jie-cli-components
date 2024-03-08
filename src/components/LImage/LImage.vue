@@ -8,7 +8,7 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import useStylePick from '../../hooks/useStylePick.js'
 import { componentsDefaultProps, transformToComponentProps } from '../../defaultProps.js'
 defineOptions({ name: 'l-image' })

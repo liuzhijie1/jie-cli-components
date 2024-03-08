@@ -1,4 +1,4 @@
-import { mapValues } from "lodash-es";
+import { mapValues } from 'lodash-es'
 
 export const commonDefaultProps = {
   // actions
@@ -29,6 +29,7 @@ export const commonDefaultProps = {
 export const textDefaultProps = {
   // basic props - font styles
   fontSize: '14px',
+  fontFamily: '',
   fontWeight: 'normal',
   fontStyle: 'normal',
   textDecoration: 'none',
@@ -65,7 +66,7 @@ export const componentsDefaultProps = {
   }
 }
 
-export const transformToComponentProps = (props) => {
+export const transformToComponentProps = (props: { [key: string]: any }) => {
   return mapValues(props, (item) => {
     return {
       type: item.constructor,

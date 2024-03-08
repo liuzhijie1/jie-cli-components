@@ -4,7 +4,7 @@
   </component>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import useStylePick from '../../hooks/useStylePick.js'
 import { componentsDefaultProps, transformToComponentProps } from '../../defaultProps'
 const defaultProps = transformToComponentProps(componentsDefaultProps['l-text'].props)
