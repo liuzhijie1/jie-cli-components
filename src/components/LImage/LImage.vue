@@ -10,17 +10,14 @@
 
 <script setup lang="ts">
 import useStylePick from '../../hooks/useStylePick.js'
-import { componentsDefaultProps, transformToComponentProps } from '../../defaultProps.js'
+import useComponentClick from '@/hooks/useComponentClick.js'
+import { componentsDefaultProps, transformToComponentProps, isEditingProp } from '../../defaultProps.js'
 defineOptions({ name: 'l-image' })
 
-const props = defineProps(transformToComponentProps(componentsDefaultProps['l-image'].props))
+const props = defineProps(transformToComponentProps(componentsDefaultProps['l-image'].props, isEditingProp))
 
 const styleProps = useStylePick(props)
-const handleClick = () => {
-  if (props.actionType && props.url) {
-    window.location.href = props.url
-  }
-}
+const handleClick = useComponentClick(props)
 </script>
 <style>
 .l-image-component {

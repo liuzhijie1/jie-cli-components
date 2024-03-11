@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import useStylePick from '../../hooks/useStylePick.js'
-import { componentsDefaultProps, transformToComponentProps } from '../../defaultProps'
+import useComponentClick from '@/hooks/useComponentClick.js'
 
 defineOptions({ name: 'l-text' })
 
@@ -15,19 +15,23 @@ const props = defineProps({
 })
 
 const styleProps = useStylePick(props)
-const handleClick = () => {
-  if (props.actionType && props.url) {
-    window.location.href = props.url
-  }
-}
+const handleClick = useComponentClick(props)
 </script>
 
 <script lang="ts">
-const defaultProps = transformToComponentProps(componentsDefaultProps['l-text'].props)
-defaultProps.tag = {
-  type: String,
-  default: 'p'
+import {
+  componentsDefaultProps,
+  transformToComponentProps,
+  isEditingProp
+} from '../../defaultProps'
+const extraProps = {
+  tag: {
+    type: String,
+    default: 'p'
+  },
+  ...isEditingProp
 }
+const defaultProps = transformToComponentProps(componentsDefaultProps['l-text'].props, extraProps)
 </script>
 
 <style scoped>

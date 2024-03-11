@@ -1,5 +1,31 @@
 import { mapValues } from 'lodash-es'
 
+export interface ComponentData {
+  props: { [key: string]: any }
+  id: string
+  name: string
+  layerName?: string
+  isHidden?: boolean
+  isLocked?: boolean
+}
+
+export interface PageData {
+  props: { [key: string]: any }
+  setting: { [key: string]: any }
+  id?: number
+  title?: string
+  desc?: string
+  coverImg?: string
+  uuid?: string
+  latestPublishAt?: string
+  updatedAt?: string
+  isTemplate?: boolean
+  isHot?: boolean
+  isNew?: boolean
+  author?: string
+  status?: string
+}
+
 export const commonDefaultProps = {
   // actions
   actionType: '',
@@ -28,6 +54,7 @@ export const commonDefaultProps = {
 
 export const textDefaultProps = {
   // basic props - font styles
+  text: '正文内容',
   fontSize: '14px',
   fontFamily: '',
   fontWeight: 'normal',
@@ -45,12 +72,15 @@ export const imageDefaultProps = {
   ...commonDefaultProps
 }
 
+export const shapeDefaultProps = {
+  backgroundColor: '',
+  ...commonDefaultProps
+}
+
 export const componentsDefaultProps = {
   'l-text': {
     props: {
-      text: '正文内容',
-      ...textDefaultProps,
-      fontSize: '14px'
+      ...textDefaultProps
     }
   },
   'l-image': {
@@ -60,19 +90,33 @@ export const componentsDefaultProps = {
   },
   'l-shape': {
     props: {
-      backgroundColor: '',
       ...commonDefaultProps
     }
   }
 }
 
-export const transformToComponentProps = (props: { [key: string]: any }) => {
-  return mapValues(props, (item) => {
+export const isEditingProp = {
+  isEditing: {
+    type: Boolean,
+    default: false
+  }
+}
+
+export const transformToComponentProps = (
+  props: { [key: string]: any },
+  extraProps?: { [key: string]: any }
+) => {
+  const mapProps = mapValues(props, (item) => {
     return {
       type: item.constructor,
       default: item
     }
   })
+  if (extraProps) {
+    return { ...mapProps, ...extraProps }
+  } else {
+    return mapProps
+  }
 }
 
 export default componentsDefaultProps
