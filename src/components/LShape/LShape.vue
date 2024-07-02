@@ -9,6 +9,7 @@
 
 <script setup lang="ts">
 import useStylePick from '../../hooks/useStylePick.js'
+import useComponentClick from '@/hooks/useComponentClick.js'
 
 defineOptions({ name: 'l-shape' })
 
@@ -17,15 +18,18 @@ const props = defineProps({
 })
 
 const styleProps = useStylePick(props)
-const handleClick = () => {
-  if (props.actionType && props.url) {
-    window.location.href = props.url
-  }
-}
+const handleClick = useComponentClick(props)
 </script>
 
 <script lang="ts">
-import { componentsDefaultProps, transformToComponentProps } from '../../defaultProps.js'
+import {
+  componentsDefaultProps,
+  transformToComponentProps,
+  isEditingProp
+} from '../../defaultProps.js'
 
-const defaultProps = transformToComponentProps(componentsDefaultProps['l-shape'].props)
+const defaultProps = transformToComponentProps(
+  componentsDefaultProps['l-shape'].props,
+  isEditingProp
+)
 </script>
