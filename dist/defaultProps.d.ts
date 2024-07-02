@@ -1,3 +1,33 @@
+export interface ComponentData {
+    props: {
+        [key: string]: any;
+    };
+    id: string;
+    name: string;
+    layerName?: string;
+    isHidden?: boolean;
+    isLocked?: boolean;
+}
+export interface PageData {
+    props: {
+        [key: string]: any;
+    };
+    setting: {
+        [key: string]: any;
+    };
+    id?: number;
+    title?: string;
+    desc?: string;
+    coverImg?: string;
+    uuid?: string;
+    latestPublishAt?: string;
+    updatedAt?: string;
+    isTemplate?: boolean;
+    isHot?: boolean;
+    isNew?: boolean;
+    author?: string;
+    status?: string;
+}
 export declare const commonDefaultProps: {
     actionType: string;
     url: string;
@@ -37,6 +67,7 @@ export declare const textDefaultProps: {
     left: string;
     top: string;
     right: string;
+    text: string;
     fontSize: string;
     fontFamily: string;
     fontWeight: string;
@@ -68,10 +99,30 @@ export declare const imageDefaultProps: {
     right: string;
     imageSrc: string;
 };
+export declare const shapeDefaultProps: {
+    actionType: string;
+    url: string;
+    height: string;
+    width: string;
+    paddingLeft: string;
+    paddingRight: string;
+    paddingTop: string;
+    paddingBottom: string;
+    borderStyle: string;
+    borderColor: string;
+    borderWidth: string;
+    borderRadius: string;
+    boxShadow: string;
+    opacity: number;
+    position: string;
+    left: string;
+    top: string;
+    right: string;
+    backgroundColor: string;
+};
 export declare const componentsDefaultProps: {
     'l-text': {
         props: {
-            fontSize: string;
             actionType: string;
             url: string;
             height: string;
@@ -90,6 +141,8 @@ export declare const componentsDefaultProps: {
             left: string;
             top: string;
             right: string;
+            text: string;
+            fontSize: string;
             fontFamily: string;
             fontWeight: string;
             fontStyle: string;
@@ -98,7 +151,6 @@ export declare const componentsDefaultProps: {
             textAlign: string;
             color: string;
             backgroundColor: string;
-            text: string;
         };
     };
     'l-image': {
@@ -144,16 +196,20 @@ export declare const componentsDefaultProps: {
             left: string;
             top: string;
             right: string;
-            backgroundColor: string;
         };
+    };
+};
+export declare const isEditingProp: {
+    isEditing: {
+        type: BooleanConstructor;
+        default: boolean;
     };
 };
 export declare const transformToComponentProps: (props: {
     [key: string]: any;
-}) => {
-    [x: string]: {
-        type: any;
-        default: any;
-    };
+}, extraProps?: {
+    [key: string]: any;
+} | undefined) => {
+    [x: string]: any;
 };
 export default componentsDefaultProps;

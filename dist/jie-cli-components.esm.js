@@ -1,4 +1,4 @@
-import { computed, defineComponent, openBlock, createBlock, resolveDynamicComponent, withModifiers, normalizeStyle, unref, withCtx, createTextVNode, toDisplayString, createElementBlock, Fragment, renderList, normalizeProps, guardReactiveProps } from 'vue';
+import { computed, defineComponent, openBlock, createBlock, resolveDynamicComponent, withModifiers, unref, normalizeStyle, withCtx, createTextVNode, toDisplayString, createElementBlock, Fragment, renderList, normalizeProps, guardReactiveProps } from 'vue';
 
 /** Detect free variable `global` from Node.js. */
 var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
@@ -3361,6 +3361,7 @@ const commonDefaultProps = {
 };
 const textDefaultProps = {
     // basic props - font styles
+    text: '正文内容',
     fontSize: '14px',
     fontFamily: '',
     fontWeight: 'normal',
@@ -3379,9 +3380,7 @@ const imageDefaultProps = {
 const componentsDefaultProps = {
     'l-text': {
         props: {
-            text: '正文内容',
-            ...textDefaultProps,
-            fontSize: '14px'
+            ...textDefaultProps
         }
     },
     'l-image': {
@@ -3391,18 +3390,29 @@ const componentsDefaultProps = {
     },
     'l-shape': {
         props: {
-            backgroundColor: '',
             ...commonDefaultProps
         }
     }
 };
-const transformToComponentProps = (props) => {
-    return mapValues(props, (item) => {
+const isEditingProp = {
+    isEditing: {
+        type: Boolean,
+        default: false
+    }
+};
+const transformToComponentProps = (props, extraProps) => {
+    const mapProps = mapValues(props, (item) => {
         return {
             type: item.constructor,
             default: item
         };
     });
+    if (extraProps) {
+        return { ...mapProps, ...extraProps };
+    }
+    else {
+        return mapProps;
+    }
 };
 
 const defaultStyles = without(Object.keys(textDefaultProps), 'actionType', 'url', 'text');
@@ -3410,11 +3420,23 @@ const useStylePick = (props, pickStyles = defaultStyles) => {
     return computed(() => pick(props, pickStyles));
 };
 
-const defaultProps$1 = transformToComponentProps(componentsDefaultProps['l-text'].props);
-defaultProps$1.tag = {
-    type: String,
-    default: 'p'
+const useComponentClick = (props) => {
+    const handleClick = () => {
+        if (props.actionType && props.url && !props.isEditing) {
+            window.location.href = props.url;
+        }
+    };
+    return handleClick;
 };
+
+const extraProps = {
+    tag: {
+        type: String,
+        default: 'p'
+    },
+    ...isEditingProp
+};
+const defaultProps$1 = transformToComponentProps(componentsDefaultProps['l-text'].props, extraProps);
 var script$3 = /*#__PURE__*/ defineComponent({
     ...{ name: 'l-text' },
     __name: 'LText',
@@ -3424,14 +3446,10 @@ var script$3 = /*#__PURE__*/ defineComponent({
     setup(__props) {
         const props = __props;
         const styleProps = useStylePick(props);
-        const handleClick = () => {
-            if (props.actionType && props.url) {
-                window.location.href = props.url;
-            }
-        };
+        const handleClick = useComponentClick(props);
         return (_ctx, _cache) => {
             return (openBlock(), createBlock(resolveDynamicComponent(_ctx.tag), {
-                onClick: withModifiers(handleClick, ["prevent"]),
+                onClick: withModifiers(unref(handleClick), ["prevent"]),
                 style: normalizeStyle(unref(styleProps)),
                 class: "l-text-component"
             }, {
@@ -3439,7 +3457,7 @@ var script$3 = /*#__PURE__*/ defineComponent({
                     createTextVNode(toDisplayString(_ctx.text), 1 /* TEXT */)
                 ]),
                 _: 1 /* STABLE */
-            }, 8 /* PROPS */, ["style"]));
+            }, 8 /* PROPS */, ["onClick", "style"]));
         };
     }
 });
@@ -3455,20 +3473,18 @@ const _hoisted_1$1 = ["src"];
 var script$2 = /*#__PURE__*/ defineComponent({
     ...{ name: 'l-image' },
     __name: 'LImage',
-    props: transformToComponentProps(componentsDefaultProps['l-image'].props),
+    props: transformToComponentProps(componentsDefaultProps['l-image'].props, isEditingProp),
     setup(__props) {
         const props = __props;
         const styleProps = useStylePick(props);
-        const handleClick = () => {
-            if (props.actionType && props.url) {
-                window.location.href = props.url;
-            }
-        };
+        const handleClick = useComponentClick(props);
         return (_ctx, _cache) => {
             return (openBlock(), createElementBlock("img", {
                 src: _ctx.imageSrc,
                 style: normalizeStyle(unref(styleProps)),
-                onClick: withModifiers(handleClick, ["prevent"]),
+                onClick: _cache[0] || (_cache[0] = withModifiers(
+                //@ts-ignore
+                (...args) => (unref(handleClick) && unref(handleClick)(...args)), ["prevent"])),
                 class: "l-image-component",
                 draggable: false
             }, null, 12 /* STYLE, PROPS */, _hoisted_1$1));
@@ -3482,7 +3498,7 @@ script$2.install = (app) => {
     app.component(script$2.name, script$2);
 };
 
-const defaultProps = transformToComponentProps(componentsDefaultProps['l-shape'].props);
+const defaultProps = transformToComponentProps(componentsDefaultProps['l-shape'].props, isEditingProp);
 var script$1 = /*#__PURE__*/ defineComponent({
     ...{ name: 'l-shape' },
     __name: 'LShape',
@@ -3492,14 +3508,12 @@ var script$1 = /*#__PURE__*/ defineComponent({
     setup(__props) {
         const props = __props;
         const styleProps = useStylePick(props);
-        const handleClick = () => {
-            if (props.actionType && props.url) {
-                window.location.href = props.url;
-            }
-        };
+        const handleClick = useComponentClick(props);
         return (_ctx, _cache) => {
             return (openBlock(), createElementBlock("div", {
-                onClick: withModifiers(handleClick, ["prevent"]),
+                onClick: _cache[0] || (_cache[0] = withModifiers(
+                //@ts-ignore
+                (...args) => (unref(handleClick) && unref(handleClick)(...args)), ["prevent"])),
                 style: normalizeStyle(unref(styleProps)),
                 class: "l-shape-component",
                 draggable: false
@@ -3514,12 +3528,14 @@ script$1.install = (app) => {
     app.component(script$1.name, script$1);
 };
 
-const _hoisted_1 = { class: "final-page" };
-const _hoisted_2 = ["id"];
+const _hoisted_1 = ["id"];
 var script = /*#__PURE__*/ defineComponent({
     ...{ name: 'final-page' },
     __name: 'FinalPage',
     props: {
+        page: {
+            type: Object
+        },
         components: {
             type: Array,
             required: true
@@ -3527,16 +3543,19 @@ var script = /*#__PURE__*/ defineComponent({
     },
     setup(__props) {
         return (_ctx, _cache) => {
-            return (openBlock(), createElementBlock("div", _hoisted_1, [
+            return (openBlock(), createElementBlock("div", {
+                class: "final-page",
+                style: normalizeStyle(__props.page && __props.page.props)
+            }, [
                 (openBlock(true), createElementBlock(Fragment, null, renderList(__props.components, (item) => {
                     return (openBlock(), createElementBlock("div", {
                         key: item.id,
                         id: `component-${item.id}`
                     }, [
                         (openBlock(), createBlock(resolveDynamicComponent(item.name), normalizeProps(guardReactiveProps(item.props)), null, 16 /* FULL_PROPS */))
-                    ], 8 /* PROPS */, _hoisted_2));
+                    ], 8 /* PROPS */, _hoisted_1));
                 }), 128 /* KEYED_FRAGMENT */))
-            ]));
+            ], 4 /* STYLE */));
         };
     }
 });

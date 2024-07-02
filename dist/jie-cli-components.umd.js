@@ -3365,6 +3365,7 @@
   };
   const textDefaultProps = {
       // basic props - font styles
+      text: '正文内容',
       fontSize: '14px',
       fontFamily: '',
       fontWeight: 'normal',
@@ -3383,9 +3384,7 @@
   const componentsDefaultProps = {
       'l-text': {
           props: {
-              text: '正文内容',
-              ...textDefaultProps,
-              fontSize: '14px'
+              ...textDefaultProps
           }
       },
       'l-image': {
@@ -3395,18 +3394,29 @@
       },
       'l-shape': {
           props: {
-              backgroundColor: '',
               ...commonDefaultProps
           }
       }
   };
-  const transformToComponentProps = (props) => {
-      return mapValues(props, (item) => {
+  const isEditingProp = {
+      isEditing: {
+          type: Boolean,
+          default: false
+      }
+  };
+  const transformToComponentProps = (props, extraProps) => {
+      const mapProps = mapValues(props, (item) => {
           return {
               type: item.constructor,
               default: item
           };
       });
+      if (extraProps) {
+          return { ...mapProps, ...extraProps };
+      }
+      else {
+          return mapProps;
+      }
   };
 
   const defaultStyles = without(Object.keys(textDefaultProps), 'actionType', 'url', 'text');
@@ -3414,11 +3424,23 @@
       return vue.computed(() => pick(props, pickStyles));
   };
 
-  const defaultProps$1 = transformToComponentProps(componentsDefaultProps['l-text'].props);
-  defaultProps$1.tag = {
-      type: String,
-      default: 'p'
+  const useComponentClick = (props) => {
+      const handleClick = () => {
+          if (props.actionType && props.url && !props.isEditing) {
+              window.location.href = props.url;
+          }
+      };
+      return handleClick;
   };
+
+  const extraProps = {
+      tag: {
+          type: String,
+          default: 'p'
+      },
+      ...isEditingProp
+  };
+  const defaultProps$1 = transformToComponentProps(componentsDefaultProps['l-text'].props, extraProps);
   var script$3 = /*#__PURE__*/ vue.defineComponent({
       ...{ name: 'l-text' },
       __name: 'LText',
@@ -3428,14 +3450,10 @@
       setup(__props) {
           const props = __props;
           const styleProps = useStylePick(props);
-          const handleClick = () => {
-              if (props.actionType && props.url) {
-                  window.location.href = props.url;
-              }
-          };
+          const handleClick = useComponentClick(props);
           return (_ctx, _cache) => {
               return (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(_ctx.tag), {
-                  onClick: vue.withModifiers(handleClick, ["prevent"]),
+                  onClick: vue.withModifiers(vue.unref(handleClick), ["prevent"]),
                   style: vue.normalizeStyle(vue.unref(styleProps)),
                   class: "l-text-component"
               }, {
@@ -3443,7 +3461,7 @@
                       vue.createTextVNode(vue.toDisplayString(_ctx.text), 1 /* TEXT */)
                   ]),
                   _: 1 /* STABLE */
-              }, 8 /* PROPS */, ["style"]));
+              }, 8 /* PROPS */, ["onClick", "style"]));
           };
       }
   });
@@ -3459,20 +3477,18 @@
   var script$2 = /*#__PURE__*/ vue.defineComponent({
       ...{ name: 'l-image' },
       __name: 'LImage',
-      props: transformToComponentProps(componentsDefaultProps['l-image'].props),
+      props: transformToComponentProps(componentsDefaultProps['l-image'].props, isEditingProp),
       setup(__props) {
           const props = __props;
           const styleProps = useStylePick(props);
-          const handleClick = () => {
-              if (props.actionType && props.url) {
-                  window.location.href = props.url;
-              }
-          };
+          const handleClick = useComponentClick(props);
           return (_ctx, _cache) => {
               return (vue.openBlock(), vue.createElementBlock("img", {
                   src: _ctx.imageSrc,
                   style: vue.normalizeStyle(vue.unref(styleProps)),
-                  onClick: vue.withModifiers(handleClick, ["prevent"]),
+                  onClick: _cache[0] || (_cache[0] = vue.withModifiers(
+                  //@ts-ignore
+                  (...args) => (vue.unref(handleClick) && vue.unref(handleClick)(...args)), ["prevent"])),
                   class: "l-image-component",
                   draggable: false
               }, null, 12 /* STYLE, PROPS */, _hoisted_1$1));
@@ -3486,7 +3502,7 @@
       app.component(script$2.name, script$2);
   };
 
-  const defaultProps = transformToComponentProps(componentsDefaultProps['l-shape'].props);
+  const defaultProps = transformToComponentProps(componentsDefaultProps['l-shape'].props, isEditingProp);
   var script$1 = /*#__PURE__*/ vue.defineComponent({
       ...{ name: 'l-shape' },
       __name: 'LShape',
@@ -3496,14 +3512,12 @@
       setup(__props) {
           const props = __props;
           const styleProps = useStylePick(props);
-          const handleClick = () => {
-              if (props.actionType && props.url) {
-                  window.location.href = props.url;
-              }
-          };
+          const handleClick = useComponentClick(props);
           return (_ctx, _cache) => {
               return (vue.openBlock(), vue.createElementBlock("div", {
-                  onClick: vue.withModifiers(handleClick, ["prevent"]),
+                  onClick: _cache[0] || (_cache[0] = vue.withModifiers(
+                  //@ts-ignore
+                  (...args) => (vue.unref(handleClick) && vue.unref(handleClick)(...args)), ["prevent"])),
                   style: vue.normalizeStyle(vue.unref(styleProps)),
                   class: "l-shape-component",
                   draggable: false
@@ -3518,12 +3532,14 @@
       app.component(script$1.name, script$1);
   };
 
-  const _hoisted_1 = { class: "final-page" };
-  const _hoisted_2 = ["id"];
+  const _hoisted_1 = ["id"];
   var script = /*#__PURE__*/ vue.defineComponent({
       ...{ name: 'final-page' },
       __name: 'FinalPage',
       props: {
+          page: {
+              type: Object
+          },
           components: {
               type: Array,
               required: true
@@ -3531,16 +3547,19 @@
       },
       setup(__props) {
           return (_ctx, _cache) => {
-              return (vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
+              return (vue.openBlock(), vue.createElementBlock("div", {
+                  class: "final-page",
+                  style: vue.normalizeStyle(__props.page && __props.page.props)
+              }, [
                   (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(__props.components, (item) => {
                       return (vue.openBlock(), vue.createElementBlock("div", {
                           key: item.id,
                           id: `component-${item.id}`
                       }, [
                           (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(item.name), vue.normalizeProps(vue.guardReactiveProps(item.props)), null, 16 /* FULL_PROPS */))
-                      ], 8 /* PROPS */, _hoisted_2));
+                      ], 8 /* PROPS */, _hoisted_1));
                   }), 128 /* KEYED_FRAGMENT */))
-              ]));
+              ], 4 /* STYLE */));
           };
       }
   });
