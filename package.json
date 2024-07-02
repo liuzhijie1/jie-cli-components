@@ -6,7 +6,6 @@
   "main": "dist/jie-cli-components.umd.js",
   "module": "dist/jie-cli-components.esm.js",
   "license": "MIT",
-  "type": "module",
   "types": "dist/index.d.ts",
   "keywords": [
     "Component",
