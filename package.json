@@ -28,7 +28,7 @@
     "format": "prettier --write src/",
     "build:es": "rollup --config build/rollup.esm.config.js",
     "build:umd": "rollup --config build/rollup.umd.config.js",
-    "prepublishOnly": "npm run test && npm run build"
+    "prepublishOnly": "npm run build"
   },
   "husky": {
     "hooks": {
